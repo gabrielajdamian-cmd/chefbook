@@ -34,6 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
 # mi-comic1
 ![Cómic 1](comic1.jpeg)
 
@@ -44,3 +45,16 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 # mi-comic3
 ![Cómic 3](comic3.jpeg)
+
+# mi-comic4
+![Cómic 4](comic4.jpeg)
+
+
+# mi-comic5 - Paso 1
+![Cómic 5.1](comic5.1.png)
+
+# mi-comic5 - Paso 2
+![Cómic 5.2](comic5.2.png)
+
+# mi-comic5 - Paso 3
+![Cómic 5.3](comic5.png)
