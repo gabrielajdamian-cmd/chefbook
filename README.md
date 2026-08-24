@@ -49,12 +49,3 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 # mi-comic4
 ![Cómic 4](comic4.jpeg)
 
-
-# mi-comic5 - Paso 1
-![Cómic 5.1](comic5.1.png)
-
-# mi-comic5 - Paso 2
-![Cómic 5.2](comic5.2.png)
-
-# mi-comic5 - Paso 3
-![Cómic 5.3](comic5.png)
