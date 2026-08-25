@@ -48,8 +48,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 # mi-comic4
 ![Cómic 4](comic4.jpeg)
-# mi-comic5
-![Cómic5](comic5.jpeg)
 
 
 
