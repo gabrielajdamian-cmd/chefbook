@@ -38,7 +38,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 # actualizar imagen y enlace del logo
 ![Cómic](comic.jpeg)
 
-
+ Proyecto: ChefBook
+- Estado: En desarrollo
 
 
 
