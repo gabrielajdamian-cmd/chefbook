@@ -35,8 +35,9 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-# mi-comic1
-![Cómic 1](comic1.jpeg)
+# actualizar imagen y enlace del logo
+![Cómic](comic.jpeg)
+
 
 
 
