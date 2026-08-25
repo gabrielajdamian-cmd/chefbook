@@ -23,4 +23,6 @@ export default function NuevaRecetaPage() {
       </form>
     </div>
   );
+
+  {/* Formulario para publicar nueva receta */}
 }
