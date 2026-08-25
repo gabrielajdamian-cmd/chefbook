@@ -90,4 +90,6 @@ export default function RegisterPage() {
       </form>
     </div>
   );
+
+  {/* Página para registrar nuevos usuarios en ChefBook */}
 }
