@@ -24,4 +24,6 @@ export default function LoginPage() {
       </form>
     </div>
   );
+
+  {/* Página para iniciar sesión */}
 }
