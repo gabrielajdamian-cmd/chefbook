@@ -38,4 +38,5 @@ export default function RecetasPage() {
       ))}
     </div>
   );
+  {/* Página para registrar nuevos usuarios */}
 }
