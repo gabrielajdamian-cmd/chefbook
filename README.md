@@ -50,4 +50,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ![Cómic 4](comic4.jpeg)
 
 # mi-comic5
-![Cómic 5](comic5.png)
+![Cómic 5](comic5.jpng)
+
