@@ -1,72 +1,112 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '../../lib/supabase'
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+interface Receta {
+  id: string;
+  titulo: string;
+  descripcion: string;
+}
 
 export default function DashboardPage() {
-  const [usuario, setUsuario] = useState<any>(null)
-  const [rol, setRol] = useState('')
-  const router = useRouter()
+  const [usuario, setUsuario] = useState<any>(null);
+  const [rol, setRol] = useState<string>("");
+  const [recetas, setRecetas] = useState<Receta[]>([]);
+  const [cargando, setCargando] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     async function cargarDatos() {
-      const { data: { session } } = await supabase.auth.getSession()
-      
+      const { data: { session } } = await supabase.auth.getSession();
+
       if (!session) {
-        router.push('/login')
-        return
+        router.push("/login");
+        return;
       }
 
-      setUsuario(session.user)
+      setUsuario(session.user);
 
-      const { data } = await supabase
-        .from('profiles')
-        .select('role, full_name')
-        .eq('id', session.user.id)
-        .single()
+      // Obtener el rol del usuario
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", session.user.id)
+        .single();
 
-      if (data) {
-        setRol(data.role)
+      if (profile) {
+        setRol(profile.role);
       }
+
+      // Obtener la lista de recetas
+      const { data: listaRecetas } = await supabase
+        .from("recetas")
+        .select("*");
+
+      if (listaRecetas) {
+        setRecetas(listaRecetas);
+      }
+
+      setCargando(false);
     }
 
-    cargarDatos()
-  }, [supabase, router])
+    cargarDatos();
+  }, [router]);
 
   async function cerrarSesion() {
-    await supabase.auth.signOut()
-    router.push('/')
+    await supabase.auth.signOut();
+    router.push("/login");
   }
 
-  if (!usuario) return <p className="text-center mt-10">Cargando...</p>
+  if (cargando) return <p style={{ textAlign: "center", marginTop: "2rem" }}>Cargando...</p>;
 
   return (
-    <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-      <h1> Bienvenido, {usuario?.email}</h1>
-      
-      <div style={{ padding: '1rem', backgroundColor: '#f0fdf4', borderRadius: '8px', margin: '1rem 0' }}>
-        <p><strong>Rol:</strong> {rol === 'chef' ? '🧑‍🍳 Chef' : '👤 Lector'}</p>
+    <main style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto", fontFamily: "sans-serif" }}>
+      <h1>Bienvenido, {usuario?.email}</h1>
+
+      <div style={{ padding: "1rem", backgroundColor: "#f0fdf4", borderRadius: "8px", marginBottom: "1.5rem" }}>
+        <p><strong>Rol:</strong> {rol === "chef" ? "👨‍🍳 Chef" : "👤 Lector"}</p>
         <p><strong>Correo:</strong> {usuario?.email}</p>
+        <button
+          onClick={cerrarSesion}
+          style={{ padding: "0.5rem 1rem", backgroundColor: "#ef4444", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", marginTop: "0.5rem" }}
+        >
+          Cerrar Sesión
+        </button>
       </div>
 
-      {rol === 'chef' && (
-        <div style={{ margin: '1rem 0' }}>
-          <a 
-            href="/dashboard/nuevo" 
-            style={{ padding: '0.5rem 1rem', backgroundColor: '#16a34a', color: 'white', borderRadius: '4px', textDecoration: 'none' }}
+      {rol === "chef" && (
+        <div style={{ marginBottom: "1.5rem" }}>
+          <Link
+            href="/dashboard/nuevo"
+            style={{ padding: "0.5rem 1rem", backgroundColor: "#16a34a", color: "white", textDecoration: "none", borderRadius: "4px" }}
           >
-             Publicar nueva receta
-          </a>
+            + Crear Nueva Receta
+          </Link>
         </div>
       )}
 
-      <button
-        onClick={cerrarSesion}
-        style={{ padding: '0.5rem 1rem', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', marginTop: '1rem' }}
-      >
-        Cerrar Sesión
-      </button>
+      <h2>Recetas Disponibles</h2>
+      {recetas.length === 0 ? (
+        <p>No hay recetas registradas todavía.</p>
+      ) : (
+        <div style={{ display: "grid", gap: "1rem", marginTop: "1rem" }}>
+          {recetas.map((receta) => (
+            <div key={receta.id} style={{ border: "1px solid #e5e7eb", padding: "1rem", borderRadius: "8px" }}>
+              <h3 style={{ margin: "0 0 0.5rem 0" }}>{receta.titulo}</h3>
+              <p style={{ margin: 0, color: "#4b5563" }}>{receta.descripcion}</p>
+              <Link
+                href={`/recetas/${receta.id}`}
+                style={{ display: "inline-block", marginTop: "0.5rem", color: "#2563eb", textDecoration: "none" }}
+              >
+                Ver receta completa →
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
     </main>
-  )
+  );
 }
