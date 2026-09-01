@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface Receta {
-  id: string;
-  titulo: string;
-  descripcion: string;
+  id: number;
+  nombre: string;
+  ingredientes: string;
+  pasos: string;
+  tiempo_minutos: number;
 }
 
 export default function DashboardPage() {
@@ -41,7 +43,7 @@ export default function DashboardPage() {
       }
 
       // Obtener la lista de recetas
-      const { data: listaRecetas } = await supabase
+      const { data: listaRecetas, error } = await supabase
         .from("recetas")
         .select("*");
 
@@ -95,8 +97,13 @@ export default function DashboardPage() {
         <div style={{ display: "grid", gap: "1rem", marginTop: "1rem" }}>
           {recetas.map((receta) => (
             <div key={receta.id} style={{ border: "1px solid #e5e7eb", padding: "1rem", borderRadius: "8px" }}>
-              <h3 style={{ margin: "0 0 0.5rem 0" }}>{receta.titulo}</h3>
-              <p style={{ margin: 0, color: "#4b5563" }}>{receta.descripcion}</p>
+              <h3 style={{ margin: "0 0 0.5rem 0" }}>{receta.nombre}</h3>
+              <p style={{ margin: "0 0 0.5rem 0", color: "#4b5563" }}>
+                <strong>Ingredientes:</strong> {receta.ingredientes}
+              </p>
+              <p style={{ margin: "0 0 0.5rem 0", color: "#6b7280", fontSize: "0.9rem" }}>
+                ⏱️ {receta.tiempo_minutos} minutos
+              </p>
               <Link
                 href={`/recetas/${receta.id}`}
                 style={{ display: "inline-block", marginTop: "0.5rem", color: "#2563eb", textDecoration: "none" }}
