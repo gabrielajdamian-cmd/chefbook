@@ -45,7 +45,7 @@ export default function RecetasPage() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
         <h1>Recetario</h1>
         <Link href="/dashboard" style={{ color: "#2563eb", textDecoration: "none" }}>
-          ← Volver al Dashboard
+          ← Volver al Inicio
         </Link>
       </div>
 

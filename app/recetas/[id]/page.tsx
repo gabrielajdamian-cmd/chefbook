@@ -54,7 +54,7 @@ export default function DetalleRecetaPage() {
   return (
     <main style={{ padding: "2rem", maxWidth: "700px", margin: "0 auto", fontFamily: "sans-serif" }}>
       <Link href="/recetas" style={{ color: "#2563eb", textDecoration: "none", display: "inline-block", marginBottom: "1rem" }}>
-        ← Volver al recetario
+        ← Volver al Inicio
       </Link>
 
       <div style={{ border: "1px solid #e5e7eb", padding: "1.5rem", borderRadius: "8px", backgroundColor: "#ffffff" }}>
