@@ -1,12 +1,12 @@
 https://chefbook-gamma.vercel.app/login
 
-# 🍳 ChefBook
+#  ChefBook
 
 ChefBook es una aplicación web moderna desarrollada con **Next.js** para la gestión e interacción de recetas culinarias, consumo de APIs externas de cocina y control de usuarios con Supabase.
 
 ---
 
-## 🚀 Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 * **Framework:** [Next.js](https://nextjs.org/) (React Framework con App Router)
 * **Lenguaje:** TypeScript
@@ -16,7 +16,7 @@ ChefBook es una aplicación web moderna desarrollada con **Next.js** para la ges
 
 ---
 
-## 🛠️ Requisitos Previos
+##  Requisitos Previos
 
 Antes de ejecutar el proyecto, asegúrate de tener instalado:
 
@@ -25,7 +25,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 
 ---
 
-## ⚙️ Instalación y Configuración
+##  Instalación y Configuración
 
 1. **Clonar el repositorio:**
    ```bash
