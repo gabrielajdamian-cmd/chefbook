@@ -10,6 +10,7 @@ export default function NuevaRecetaPage() {
   const [ingredientes, setIngredientes] = useState("");
   const [pasos, setPasos] = useState("");
   const [tiempoMinutos, setTiempoMinutos] = useState<number | "">("");
+  const [imagenUrl, setImagenUrl] = useState(""); // <-- NUEVO ESTADO PARA IMAGEN
   const [guardando, setGuardando] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const router = useRouter();
@@ -19,12 +20,17 @@ export default function NuevaRecetaPage() {
     setGuardando(true);
     setMensaje("");
 
+    // Obtener usuario actual para asignarle la receta
+    const { data: { user } } = await supabase.auth.getUser();
+
     const { error } = await supabase.from("recetas").insert([
       {
         nombre,
         ingredientes,
         pasos,
         tiempo_minutos: Number(tiempoMinutos),
+        imagen_url: imagenUrl, // <-- GUARDA LA URL DE LA IMAGEN
+        user_id: user ? user.id : null, // <-- ASIGNA EL CHEF CREADOR
       },
     ]);
 
@@ -57,6 +63,18 @@ export default function NuevaRecetaPage() {
             required
             style={{ width: "100%", padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc" }}
             placeholder="Ej. Seco de Pollo"
+          />
+        </div>
+
+        {/* NUEVO CAMPO PARA PEGAR URL DE LA IMAGEN */}
+        <div>
+          <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>URL de la Imagen (opcional):</label>
+          <input
+            type="url"
+            value={imagenUrl}
+            onChange={(e) => setImagenUrl(e.target.value)}
+            style={{ width: "100%", padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc" }}
+            placeholder="https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
           />
         </div>
 
