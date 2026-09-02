@@ -28,8 +28,8 @@ export default function RegisterPage() {
         .insert([
           {
             id: data.user.id,
-            full_name: nombre,
-            role: rol,
+            email: email,
+            rol: rol,
           },
         ]);
 
@@ -90,6 +90,4 @@ export default function RegisterPage() {
       </form>
     </div>
   );
-
-  {/* Página para registrar nuevos usuarios en ChefBook */}
 }
