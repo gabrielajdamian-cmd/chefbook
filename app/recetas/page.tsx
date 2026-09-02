@@ -10,14 +10,29 @@ interface ApiRecipe {
   strMealThumb: string
 }
 
+// Tipo flexible para las recetas de Supabase
+interface RecetaLocal {
+  id: string
+  nombre?: string
+  titulo?: string
+  imagen_url?: string
+  imagen?: string
+  ingredientes?: string
+  preparacion?: string
+  instrucciones?: string
+  pasos?: string
+  tiempo_preparacion?: string
+  tiempo?: string
+}
+
 export default function RecetasPage() {
   const [apiRecipes, setApiRecipes] = useState<ApiRecipe[]>([])
-  const [recetasLocales, setRecetasLocales] = useState<any[]>([])
+  const [recetasLocales, setRecetasLocales] = useState<RecetaLocal[]>([])
   const [rolUsuario, setRolUsuario] = useState<string>("Lector")
   const [loading, setLoading] = useState(true)
   
-  // Estado para controlar qué receta se está viendo en el modal
-  const [recetaSeleccionada, setRecetaSeleccionada] = useState<any | null>(null)
+  // Estado para el modal de detalle
+  const [recetaSeleccionada, setRecetaSeleccionada] = useState<RecetaLocal | null>(null)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -39,7 +54,7 @@ export default function RecetasPage() {
       }
 
       const { data: locales } = await supabase.from('recetas').select('*')
-      if (locales) setRecetasLocales(locales)
+      if (locales) setRecetasLocales(locales as RecetaLocal[])
     } catch (err) {
       console.error("Error al cargar recetas:", err)
     } finally {
@@ -48,7 +63,7 @@ export default function RecetasPage() {
   }
 
   const handleEliminar = async (id: string, e: React.MouseEvent) => {
-    e.stopPropagation() // Evita que se abra el modal al hacer clic en eliminar
+    e.stopPropagation()
     if (!confirm('¿Deseas eliminar esta receta?')) return
 
     const { error } = await supabase.from('recetas').delete().eq('id', id)
@@ -112,9 +127,8 @@ export default function RecetasPage() {
                   backgroundColor: '#ffffff', 
                   display: 'flex', 
                   flexDirection: 'column', 
-                  justifyContent: 'space-between',
+                  justify: 'space-between',
                   cursor: 'pointer',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                 }}
               >
@@ -179,7 +193,7 @@ export default function RecetasPage() {
         </div>
       )}
 
-      {/* VENTANA EMERGENTE (MODAL DETALLE DE RECETA) */}
+      {/* VENTANA EMERGENTE (MODAL) */}
       {recetaSeleccionada && (
         <div 
           onClick={() => setRecetaSeleccionada(null)}
@@ -236,24 +250,35 @@ export default function RecetasPage() {
               />
             )}
 
-            <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '12px', color: '#111827' }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '8px', color: '#111827' }}>
               {recetaSeleccionada.nombre || recetaSeleccionada.titulo}
             </h2>
 
+            {(recetaSeleccionada.tiempo_preparacion || recetaSeleccionada.tiempo) && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '16px', color: '#059669', fontSize: '14px', fontWeight: 'bold' }}>
+                <span>⏱️ Tiempo de preparación:</span>
+                <span>{recetaSeleccionada.tiempo_preparacion || recetaSeleccionada.tiempo}</span>
+              </div>
+            )}
+
             {recetaSeleccionada.ingredientes && (
               <div style={{ marginBottom: '16px' }}>
-                <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '4px' }}>Ingredientes:</h3>
-                <p style={{ fontSize: '14px', color: '#4B5563', whiteSpace: 'pre-line', margin: 0 }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#374151', marginBottom: '6px' }}>
+                  Ingredientes:
+                </h3>
+                <p style={{ fontSize: '14px', color: '#4B5563', whiteSpace: 'pre-line', margin: 0, lineHeight: '1.5' }}>
                   {recetaSeleccionada.ingredientes}
                 </p>
               </div>
             )}
 
-            {(recetaSeleccionada.instrucciones || recetaSeleccionada.preparacion) && (
-              <div>
-                <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '4px' }}>Preparación:</h3>
-                <p style={{ fontSize: '14px', color: '#4B5563', whiteSpace: 'pre-line', margin: 0 }}>
-                  {recetaSeleccionada.instrucciones || recetaSeleccionada.preparacion}
+            {(recetaSeleccionada.preparacion || recetaSeleccionada.instrucciones || recetaSeleccionada.pasos) && (
+              <div style={{ marginBottom: '10px' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#374151', marginBottom: '6px' }}>
+                  Preparación:
+                </h3>
+                <p style={{ fontSize: '14px', color: '#4B5563', whiteSpace: 'pre-line', margin: 0, lineHeight: '1.5' }}>
+                  {recetaSeleccionada.preparacion || recetaSeleccionada.instrucciones || recetaSeleccionada.pasos}
                 </p>
               </div>
             )}
