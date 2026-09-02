@@ -79,7 +79,7 @@ export default function RecetasPage() {
         <Link 
           href="/dashboard/nuevo" 
           style={{ 
-            backgroundColor: '#10B981', 
+            backgroundColor: '#b93a10', 
             color: '#ffffff', 
             padding: '10px 16px', 
             borderRadius: '6px', 
@@ -109,7 +109,7 @@ export default function RecetasPage() {
               <div 
                 key={receta.id} 
                 style={{ 
-                  border: '2px solid #10B981', 
+                  border: '2px solid #b910a0', 
                   borderRadius: '8px', 
                   padding: '12px', 
                   backgroundColor: '#ffffff', 
@@ -136,10 +136,10 @@ export default function RecetasPage() {
                   </p>
                 </div>
                 
-                {/* BOTONERA: CREAR Y ELIMINAR */}
+                {/* BOTONERA: EDITAR Y ELIMINAR */}
                 <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
                   <Link 
-                    href="/dashboard/nuevo" 
+                    href={`/dashboard/editar/${receta.id}`} 
                     style={{ 
                       flex: 1, 
                       textAlign: 'center', 
@@ -152,7 +152,7 @@ export default function RecetasPage() {
                       fontWeight: 'bold' 
                     }}
                   >
-                    Crear
+                    Editar
                   </Link>
 
                   {puedeEliminar && (
