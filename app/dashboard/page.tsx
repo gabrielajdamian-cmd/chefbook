@@ -54,7 +54,7 @@ export default function DashboardPage() {
       {rol === "chef" && (
         <div style={{ marginTop: "15px" }}>
           <button 
-            onClick={() => router.push("/recipes/new")}
+            onClick={() => router.push("/dashboard/nuevo")}
             style={{ background: "#10b981", color: "white", padding: "10px 15px", border: "none", borderRadius: "4px", cursor: "pointer" }}
           >
             ➕ Crear Receta
@@ -64,7 +64,7 @@ export default function DashboardPage() {
 
       <div style={{ marginTop: "15px" }}>
         <button 
-          onClick={() => router.push("/recipes")}
+          onClick={() => router.push("/recetas")}
           style={{ background: "#3b82f6", color: "white", padding: "10px 15px", border: "none", borderRadius: "4px", cursor: "pointer" }}
         >
           📖 Explorar Recetas
