@@ -13,30 +13,33 @@ interface ApiRecipe {
 export default function RecetasPage() {
   const [apiRecipes, setApiRecipes] = useState<ApiRecipe[]>([])
   const [recetasLocales, setRecetasLocales] = useState<any[]>([])
+  const [rolUsuario, setRolUsuario] = useState<string>("Lector")
   const [userId, setUserId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // 1. Obtener el usuario activo de Supabase
+    // 1. Verificar sesión y ROL del usuario
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) setUserId(data.user.id)
+      if (data.user) {
+        setUserId(data.user.id)
+        // Lee el rol guardado en el registro ("Chef" o "Lector")
+        setRolUsuario(data.user.user_metadata?.rol || "Lector")
+      }
     })
 
-    // 2. Cargar datos
+    // 2. Cargar recetas
     cargarTodasLasRecetas()
   }, [])
 
   const cargarTodasLasRecetas = async () => {
     setLoading(true)
     try {
-      // Cargar desde la API Externa
       const res = await fetch("https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood")
       if (res.ok) {
         const data = await res.json()
         setApiRecipes(data.meals || [])
       }
 
-      // Cargar desde Supabase
       const { data: locales } = await supabase.from('recetas').select('*')
       if (locales) setRecetasLocales(locales)
     } catch (err) {
@@ -47,20 +50,20 @@ export default function RecetasPage() {
   }
 
   const handleEliminar = async (id: string) => {
-    if (!confirm('¿Deseas eliminar esta receta de tu catálogo local?')) return
+    if (rolUsuario !== "Chef") {
+      alert("Los lectores no tienen permiso para eliminar recetas.")
+      return
+    }
 
-    const { error } = await supabase
-      .from('recetas')
-      .delete()
-      .eq('id', id)
+    if (!confirm('¿Deseas eliminar esta receta?')) return
+
+    const { error } = await supabase.from('recetas').delete().eq('id', id)
 
     if (error) {
       alert('Error al eliminar: ' + error.message)
     } else {
       alert('Receta eliminada correctamente')
-      // Actualizar la lista local inmediatamente
-      const { data: locales } = await supabase.from('recetas').select('*')
-      if (locales) setRecetasLocales(locales)
+      cargarTodasLasRecetas()
     }
   }
 
@@ -71,51 +74,50 @@ export default function RecetasPage() {
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
       
-      {/* CABECERA CON BOTÓN PRINCIPAL PARA CREAR RECETA */}
+      {/* CABECERA: El botón "+ Crear Nueva Receta" SOLO se muestra al Chef */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>
           Mis Recetas Creadas (Supabase)
         </h1>
-        <Link 
-          href="/dashboard/nuevo" 
-          style={{ 
-            backgroundColor: '#b93a10', 
-            color: '#ffffff', 
-            padding: '10px 16px', 
-            borderRadius: '6px', 
-            textDecoration: 'none', 
-            fontWeight: 'bold', 
-            fontSize: '14px' 
-          }}
-        >
-          + Crear Nueva Receta
-        </Link>
+
+        {rolUsuario === "Chef" && (
+          <Link 
+            href="/dashboard/nuevo" 
+            style={{ 
+              backgroundColor: '#10B981', 
+              color: '#ffffff', 
+              padding: '10px 16px', 
+              borderRadius: '6px', 
+              textDecoration: 'none', 
+              fontWeight: 'bold', 
+              fontSize: '14px' 
+            }}
+          >
+            + Crear Nueva Receta
+          </Link>
+        )}
       </div>
 
-      {/* SECCIÓN 1: RECETAS DESDE SUPABASE */}
+      {/* SECCIÓN RECETAS LOCALES */}
       {recetasLocales.length === 0 ? (
-        <p style={{ color: '#666', marginBottom: '30px' }}>No hay recetas creadas en la base de datos local.</p>
+        <p style={{ color: '#666', marginBottom: '30px' }}>No hay recetas registradas.</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px', marginBottom: '40px' }}>
           {recetasLocales.map((receta) => {
-            // Detectar nombre e imagen dinámicamente
-            const titulo = receta.titulo || receta.nombre || receta.title || 'Receta sin título'
-            const imagen = receta.imagen_url || receta.imagen || receta.image_url || receta.photo
-
-            // Permite borrar si coincide el usuario o si no tiene asignado un user_id
-            const puedeEliminar = !receta.user_id || (userId && receta.user_id === userId)
+            const titulo = receta.nombre || receta.titulo || 'Receta sin título'
+            const imagen = receta.imagen_url || receta.imagen
 
             return (
               <div 
                 key={receta.id} 
                 style={{ 
-                  border: '2px solid #b910a0', 
+                  border: '1px solid #E5E7EB', 
                   borderRadius: '8px', 
                   padding: '12px', 
                   backgroundColor: '#ffffff', 
                   display: 'flex', 
                   flexDirection: 'column', 
-                  justifyContent: 'space-between' 
+                  justify: 'space-between' 
                 }}
               >
                 <div>
@@ -136,26 +138,26 @@ export default function RecetasPage() {
                   </p>
                 </div>
                 
-                {/* BOTONERA: EDITAR Y ELIMINAR */}
-                <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                  <Link 
-                    href={`/dashboard/editar/${receta.id}`} 
-                    style={{ 
-                      flex: 1, 
-                      textAlign: 'center', 
-                      backgroundColor: '#10B981', 
-                      color: '#ffffff', 
-                      padding: '8px 4px', 
-                      borderRadius: '6px', 
-                      textDecoration: 'none', 
-                      fontSize: '12px', 
-                      fontWeight: 'bold' 
-                    }}
-                  >
-                    Editar
-                  </Link>
+                {/* BOTONERA: Solo visible si el rol es "Chef" */}
+                {rolUsuario === "Chef" && (
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                    <Link 
+                      href={`/dashboard/editar/${receta.id}`} 
+                      style={{ 
+                        flex: 1, 
+                        textAlign: 'center', 
+                        backgroundColor: '#10B981', 
+                        color: '#ffffff', 
+                        padding: '8px 4px', 
+                        borderRadius: '6px', 
+                        textDecoration: 'none', 
+                        fontSize: '12px', 
+                        fontWeight: 'bold' 
+                      }}
+                    >
+                      Editar
+                    </Link>
 
-                  {puedeEliminar && (
                     <button 
                       onClick={() => handleEliminar(receta.id)}
                       style={{ 
@@ -172,15 +174,15 @@ export default function RecetasPage() {
                     >
                       Eliminar
                     </button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             )
           })}
         </div>
       )}
 
-      {/* SECCIÓN 2: RECETAS DESDE LA API EXTERNA */}
+      {/* SECCIÓN API EXTERNA (Lectura pública) */}
       <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px', color: '#4B5563' }}>
         Explorar Recetas Globales (TheMealDB)
       </h2>
