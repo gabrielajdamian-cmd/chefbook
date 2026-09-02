@@ -112,7 +112,7 @@ export default function RecetasPage() {
                   backgroundColor: '#ffffff', 
                   display: 'flex', 
                   flexDirection: 'column', 
-                  justify: 'space-between',
+                  justifyContent: 'space-between',
                   cursor: 'pointer',
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
