@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 
 interface ApiRecipe {
   idMeal: string
@@ -69,17 +70,35 @@ export default function RecetasPage() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      {/* SECCIÓN 1: RECETAS DESDE SUPABASE */}
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '15px' }}>
-        Mis Recetas Creadas (Supabase)
-      </h1>
+      
+      {/* CABECERA CON BOTÓN PRINCIPAL PARA CREAR RECETA */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>
+          Mis Recetas Creadas (Supabase)
+        </h1>
+        <Link 
+          href="/dashboard/nuevo" 
+          style={{ 
+            backgroundColor: '#10B981', 
+            color: '#ffffff', 
+            padding: '10px 16px', 
+            borderRadius: '6px', 
+            textDecoration: 'none', 
+            fontWeight: 'bold', 
+            fontSize: '14px' 
+          }}
+        >
+          + Crear Nueva Receta
+        </Link>
+      </div>
 
+      {/* SECCIÓN 1: RECETAS DESDE SUPABASE */}
       {recetasLocales.length === 0 ? (
         <p style={{ color: '#666', marginBottom: '30px' }}>No hay recetas creadas en la base de datos local.</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px', marginBottom: '40px' }}>
           {recetasLocales.map((receta) => {
-            // Detectar nombre e imagen dinámicamente según la columna
+            // Detectar nombre e imagen dinámicamente
             const titulo = receta.titulo || receta.nombre || receta.title || 'Receta sin título'
             const imagen = receta.imagen_url || receta.imagen || receta.image_url || receta.photo
 
@@ -104,10 +123,10 @@ export default function RecetasPage() {
                     <img 
                       src={imagen} 
                       alt={titulo} 
-                      style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' }} 
+                      style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' }} 
                     />
                   ) : (
-                    <div style={{ width: '100%', height: '100px', backgroundColor: '#F3F4F6', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '12px', marginBottom: '8px' }}>
+                    <div style={{ width: '100%', height: '140px', backgroundColor: '#F3F4F6', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '12px', marginBottom: '8px' }}>
                       Sin imagen
                     </div>
                   )}
@@ -117,24 +136,44 @@ export default function RecetasPage() {
                   </p>
                 </div>
                 
-                {puedeEliminar && (
-                  <button 
-                    onClick={() => handleEliminar(receta.id)}
+                {/* BOTONERA: CREAR Y ELIMINAR */}
+                <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                  <Link 
+                    href="/dashboard/nuevo" 
                     style={{ 
-                      width: '100%', 
-                      backgroundColor: '#EF4444', 
+                      flex: 1, 
+                      textAlign: 'center', 
+                      backgroundColor: '#10B981', 
                       color: '#ffffff', 
-                      border: 'none', 
-                      padding: '8px', 
+                      padding: '8px 4px', 
                       borderRadius: '6px', 
-                      cursor: 'pointer', 
-                      fontWeight: '500', 
-                      fontSize: '13px' 
+                      textDecoration: 'none', 
+                      fontSize: '12px', 
+                      fontWeight: 'bold' 
                     }}
                   >
-                    Eliminar receta
-                  </button>
-                )}
+                    Crear
+                  </Link>
+
+                  {puedeEliminar && (
+                    <button 
+                      onClick={() => handleEliminar(receta.id)}
+                      style={{ 
+                        flex: 1, 
+                        backgroundColor: '#EF4444', 
+                        color: '#ffffff', 
+                        border: 'none', 
+                        padding: '8px 4px', 
+                        borderRadius: '6px', 
+                        cursor: 'pointer', 
+                        fontWeight: 'bold', 
+                        fontSize: '12px' 
+                      }}
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </div>
               </div>
             )
           })}
