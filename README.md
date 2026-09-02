@@ -46,8 +46,13 @@ npm run dev
 Abrir la aplicación:
 Accede a http://localhost:3000 en tu navegador.
 
-damian_lover@gmail.com
-15092016
+Correo: daniela_pilco22@hotmail.com
+Contraseña:12345678
+Rol:Lector
+
+Correo: esteban_simbana22@hotmail.com
+Contraseña:12345678
+Rol:chef
 
 Rutas Principales
 / - Página de bienvenida.
