@@ -14,20 +14,16 @@ export default function RecetasPage() {
   const [apiRecipes, setApiRecipes] = useState<ApiRecipe[]>([])
   const [recetasLocales, setRecetasLocales] = useState<any[]>([])
   const [rolUsuario, setRolUsuario] = useState<string>("Lector")
-  const [userId, setUserId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // 1. Verificar sesión y ROL del usuario
+    // Obtener la sesión y leer el rol del usuario activo
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) {
-        setUserId(data.user.id)
-        // Lee el rol guardado en el registro ("Chef" o "Lector")
         setRolUsuario(data.user.user_metadata?.rol || "Lector")
       }
     })
 
-    // 2. Cargar recetas
     cargarTodasLasRecetas()
   }, [])
 
@@ -51,7 +47,7 @@ export default function RecetasPage() {
 
   const handleEliminar = async (id: string) => {
     if (rolUsuario !== "Chef") {
-      alert("Los lectores no tienen permiso para eliminar recetas.")
+      alert("Acceso denegado: Los lectores solo pueden ver las recetas.")
       return
     }
 
@@ -68,13 +64,13 @@ export default function RecetasPage() {
   }
 
   if (loading) {
-    return <div style={{ padding: '20px', textAlign: 'center' }}>Cargando catálogo...</div>
+    return <div style={{ padding: '20px', textAlign: 'center' }}>Cargando recetas...</div>
   }
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
       
-      {/* CABECERA: El botón "+ Crear Nueva Receta" SOLO se muestra al Chef */}
+      {/* CABECERA: El botón de crear solo es visible para el Chef */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>
           Mis Recetas Creadas (Supabase)
@@ -98,7 +94,7 @@ export default function RecetasPage() {
         )}
       </div>
 
-      {/* SECCIÓN RECETAS LOCALES */}
+      {/* RECETAS LOCALES */}
       {recetasLocales.length === 0 ? (
         <p style={{ color: '#666', marginBottom: '30px' }}>No hay recetas registradas.</p>
       ) : (
@@ -117,7 +113,7 @@ export default function RecetasPage() {
                   backgroundColor: '#ffffff', 
                   display: 'flex', 
                   flexDirection: 'column', 
-                  justify: 'space-between' 
+                  justifyContent: 'space-between' 
                 }}
               >
                 <div>
@@ -138,7 +134,7 @@ export default function RecetasPage() {
                   </p>
                 </div>
                 
-                {/* BOTONERA: Solo visible si el rol es "Chef" */}
+                {/* BOTONES DE EDICIÓN: Ocultos automáticamente si es Lector */}
                 {rolUsuario === "Chef" && (
                   <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
                     <Link 
@@ -182,7 +178,7 @@ export default function RecetasPage() {
         </div>
       )}
 
-      {/* SECCIÓN API EXTERNA (Lectura pública) */}
+      {/* API EXTERNA (Lectura pública para todos) */}
       <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px', color: '#4B5563' }}>
         Explorar Recetas Globales (TheMealDB)
       </h2>
