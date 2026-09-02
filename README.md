@@ -1,50 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+https://chefbook-gamma.vercel.app/login
 
-## Getting Started
+# 🍳 ChefBook
 
-First, run the development server:
+ChefBook es una aplicación web moderna desarrollada con **Next.js** para la gestión e interacción de recetas culinarias, consumo de APIs externas de cocina y control de usuarios con Supabase.
 
-```bash
+---
+
+## 🚀 Tecnologías Utilizadas
+
+* **Framework:** [Next.js](https://nextjs.org/) (React Framework con App Router)
+* **Lenguaje:** TypeScript
+* **Base de Datos y Autenticación:** Supabase
+* **API Externa:** [TheMealDB](https://www.themealdb.com/)
+* **Despliegue:** Vercel
+
+---
+
+## 🛠️ Requisitos Previos
+
+Antes de ejecutar el proyecto, asegúrate de tener instalado:
+
+* Node.js (versión 18 o superior)
+* npm o yarn
+
+---
+
+## ⚙️ Instalación y Configuración
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/tu-usuario/chefbook.git](https://github.com/tu-usuario/chefbook.git)
+   cd chefbook
+
+   Instalar dependencias:
+   npm install
+
+   Configurar variables de entorno:
+   NEXT_PUBLIC_SUPABASE_URL=tu_url_de_supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_clave_anonima_de_supabase
+
+Ejecutar el servidor de desarrollo:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir la aplicación:
+Accede a http://localhost:3000 en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+damian_lover@gmail.com
+15092016
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Rutas Principales
+/ - Página de bienvenida.
 
-## Learn More
+/login - Inicio de sesión y registro con Supabase.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-# actualizar imagen y enlace del logo
-![Cómic](comic.jpeg)
-
- Proyecto: ChefBook
-- Estado: En desarrollo
-
-
-
-
-
-
-
-
+/recetas - Catálogo interactivo de recetas obtenidas mediante la API externa.
